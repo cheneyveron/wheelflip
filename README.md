@@ -15,7 +15,17 @@ macOS 的“自然滚动”是鼠标和触控板共用的一个开关。WheelFli
 
 一个容易踩的坑：设置 `DeltaAxis` 时，CoreGraphics 会自动重算 `FixedPtDeltaAxis` 和 `PointDeltaAxis`。如果逐个字段取反，后两组会被翻回原样，应用读到的方向就没变。所以要先把三组值全部读出来，再一起写回。
 
-## 安装
+## 下载安装（推荐）
+
+从 [Releases](https://github.com/cheneyveron/wheelflip/releases) 下载 `WheelFlip-x.y.zip`，解压后在仓库目录里运行：
+
+```sh
+./install.sh ~/Downloads/WheelFlip.app
+```
+
+发布版用 Developer ID 签名并经过苹果公证，双击可以直接打开，不会被 Gatekeeper 拦截。安装脚本会把它放到 `~/.local/share/wheelflip/` 并设为开机自动启动。
+
+## 从源码安装
 
 ```sh
 SIGN_IDENTITY="Apple Development: Your Name (XXXXXXXXXX)" ./install.sh

@@ -7,6 +7,11 @@ APP=build/WheelFlip.app
 rm -rf "$APP" && mkdir -p "$APP/Contents/MacOS"
 cp Info.plist "$APP/Contents/Info.plist"
 clang -O2 -Wall -Wextra -arch arm64 -arch x86_64 -o "$APP/Contents/MacOS/wheelflip" wheelflip.c -framework ApplicationServices
-codesign -f -s "${SIGN_IDENTITY:--}" --identifier local.wheelflip "$APP"
+# Hardened runtime + secure timestamp: required for notarization, harmless otherwise.
+if [ -n "$SIGN_IDENTITY" ]; then
+  codesign -f -s "$SIGN_IDENTITY" --options runtime --timestamp --identifier local.wheelflip "$APP"
+else
+  codesign -f -s - --identifier local.wheelflip "$APP"
+fi
 codesign -dv "$APP" 2>&1 | grep -E 'Signature|Authority' | head -2
 echo "built $APP"
